@@ -1,4 +1,4 @@
-<div class="card w-100 my-5">
+<div class="card w-100 my-3">
   <div class="card-body">
     <h5 class="card-title text-center">Lista de Usuários</h5>
     <button href="#" class="btn btn-success mb-4 flot-end" routerLink="/form">Cadastrar Novo</button>
@@ -8,15 +8,15 @@
           <th>
             <th>Id</th>
             <th>Nome</th>
-            <th>sobrenome</th>
-            <th>Iddade</th>
+            <th>Sobrenome</th>
+            <th>Idade</th>
             <th>Profissão</th>
             <th colspan="2"></th>
-
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
+          <td></td>
           <td>{{user.id}}</td>
           <td>{{user.nome}}</td>
           <td>{{user.sobrenome}}</td>
