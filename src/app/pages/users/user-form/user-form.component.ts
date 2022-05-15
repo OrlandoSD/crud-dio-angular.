@@ -1,7 +1,10 @@
+import { error } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import {Users} from './../../../models/Users';
+import { UserService } from './../../../services/user.service';
 
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-form',
@@ -9,10 +12,14 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
-  [x: string]: any;
  userForm: FormGroup;
+ users: Array<Users> = [];
+ userId: any = '';
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder,
+    private userService: UserService,
+    private actRoute: ActivatedRoute,
+    private route: Router) {
     this.userForm = this.fb.group({
       id: 0,
       nome: '',
@@ -23,6 +30,22 @@ export class UserFormComponent implements OnInit {
    }
 
   ngOnInit(): void {
+this.actRoute.paramMap.subscribe(params => {
+    this.userId = params.get('id');
+    console.log(this.userId);
+    if(this.userId !== null){
+      this.userService.getUser(this.userId).subscribe(result => {
+        this.userForm.patchValue({
+          id: result[0].id,
+          nome: result[0].nome,
+          sobrenome: result[0].sobrenome,
+          idade: result[0].idade,
+          profissao: result[0].profissao,
+        })
+      })
+    }
+})
+
     this.getUsers();
   }
   getUsers(){
@@ -38,4 +61,24 @@ export class UserFormComponent implements OnInit {
       console.log(`Usuario ${result.nome} ${result.sobrenome} Cadastrado com sucesso!!`);
     })
   }
+
+  updateUser(){
+    this.userService.UpdateUser(this.userId, this.userForm.value).subscribe(result => {
+      console.log('Usuario Atualizado', result);
+    }, (err) => {
+
+    }, () => {
+      this.route.navigate(['/']);
+    })
+  }
+
+  actionButton(){
+    if(this.userId !== null) {
+      this.updateUser()
+    }else{
+      this.createUser()
+    }
+  }
+
+
 }

@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { convertUpdateArguments } from '@angular/compiler/src/compiler_util/expression_converter';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Users } from "../models/Users.1";
+import { observable, Observable } from 'rxjs';
+import { Users } from './../models/Users';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +30,19 @@ export class UserService {
   postUser(user: Users): Observable<Users>{
     return this.httpClient.post<Users>(this.apiUrl, user, this.httpOptions);
 
-
+  }
     //Exclui o usuario do banco DELETE
-    deleteUser(id: number): Observable<User>{
-      return this.httpClient.delete<User>(`${this.apiUrl}/id/${id}`)
+
+    deleteUser(id: Number): Observable<Users>{
+      return this.httpClient.delete<Users>(`${this.apiUrl}/id/${id}`)
     }
+  //Edita usuario UPDATE
+  UpdateUser(id: string, user: Users):Observable<Users> {
+        return this.httpClient.put<Users>(`${this.apiUrl}/id/${id}`, user, this.httpOptions);
+  }
+
+  // Lista usuarioa unico
+  getUser(id: string): Observable<Users[]>{
+    return this.httpClient.get<Users[]>(`${this.apiUrl}/id/${id}`)
   }
 }
