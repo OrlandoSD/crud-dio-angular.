@@ -64,8 +64,8 @@ this.actRoute.paramMap.subscribe(params => {
 
   updateUser(){
     this.userService.UpdateUser(this.userId, this.userForm.value).subscribe(result => {
-      console.log('Usuario Atualizado', result);
-    }, (err) => {
+      console.log('Usuário Atualizado', result);
+    }, (error) => {
 
     }, () => {
       this.route.navigate(['/']);
